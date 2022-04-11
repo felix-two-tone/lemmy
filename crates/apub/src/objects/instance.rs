@@ -3,7 +3,7 @@ use crate::{
   local_instance,
   objects::read_from_string_or_source_opt,
   protocol::{
-    objects::instance::{Instance, InstanceType},
+    objects::instance::{Instance},
     ImageObject,
     Source,
   },
@@ -15,6 +15,7 @@ use activitypub_federation::{
   traits::ApubObject,
   utils::verify_domains_match,
 };
+use activitystreams_kinds::actor::ApplicationType;
 use chrono::NaiveDateTime;
 use lemmy_api_common::utils::blocking;
 use lemmy_db_schema::{
@@ -78,7 +79,7 @@ impl ApubObject for ApubSite {
   #[tracing::instrument(skip_all)]
   async fn into_apub(self, _data: &Self::DataType) -> Result<Self::ApubType, LemmyError> {
     let instance = Instance {
-      kind: InstanceType::Service,
+      kind: ApplicationType::Application,
       id: ObjectId::new(self.actor_id()),
       name: self.name.clone(),
       content: self.sidebar.as_ref().map(|d| markdown_to_html(d)),
